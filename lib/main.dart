@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 void main() => runApp(MyApp());
 
@@ -7,105 +8,159 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'flutter_screenutil_Demo',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
+  MyHomePage({Key key}) : super(key: key);
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
+    // 初始化实例，默认宽：1080，高：1920  allowFontScaling:false
+    ScreenUtil.instance = ScreenUtil.getInstance()..init(context);
+
+    // 设置iPhone6 ​​(iPhone6 ​​750*1334)
+    // ScreenUtil.instance = ScreenUtil(width: 750, height: 1334)..init(context);
+
+    // 根据系统设置字体进行缩放
+    // ScreenUtil.instance =
+    // ScreenUtil(width: 750, height: 1334, allowFontScaling: true)
+    //   ..init(context);
+
+    print('设备的屏幕的 width:${ScreenUtil.screenWidth}');
+    print('设备的屏幕的 height:${ScreenUtil.screenHeight}');
+    print('Device pixel density:${ScreenUtil.pixelRatio}');
+    print('Bottom safe zone distance:${ScreenUtil.bottomBarHeight}');
+    print('Status bar height:${ScreenUtil.statusBarHeight}px');
+    print(
+        'Ratio of actual width dp to design draft px:${ScreenUtil.getInstance().scaleWidth}');
+    print(
+        'Ratio of actual height dp to design draft px:${ScreenUtil.getInstance().scaleHeight}');
+    print(
+        'The ratio of font and width to the size of the design:${ScreenUtil.getInstance().scaleWidth * ScreenUtil.pixelRatio}');
+    print(
+        'The ratio of  height width to the size of the design:${ScreenUtil.getInstance().scaleHeight * ScreenUtil.pixelRatio}');
+
     return Scaffold(
       appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
+        title: Text('flutter_screenutil_Demo'),
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          // 第一行
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              // 长方形
+              Container(
+                width: ScreenUtil.getInstance().setWidth(200),
+                height: ScreenUtil.getInstance().setHeight(280),
+                color: Colors.red,
+                child: Text('设置红色'),
+              ),
+              // 正方形
+              Container(
+                width: ScreenUtil.getInstance().setWidth(280),
+                height: ScreenUtil.getInstance().setWidth(280),
+                color: Colors.green,
+                child: Text('设置绿色'),
+              )
+            ],
+          ),
+          // 第二行
+          Row(
+            children: <Widget>[
+              Container(
+                padding: EdgeInsets.all(ScreenUtil.getInstance().setWidth(10)),
+                width: ScreenUtil.getInstance().setWidth(375),
+                height: ScreenUtil.getInstance().setHeight(200),
+                color: Colors.red,
+                child: Text(
+                  'My width:${ScreenUtil.getInstance().setWidth(375)}dp',
+                  style: TextStyle(
+                      color: Colors.white,
+                      // 不跟随系统字体变化
+                      fontSize: ScreenUtil.getInstance().setSp(20)),
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.all(ScreenUtil.getInstance().setWidth(10)),
+                width: ScreenUtil.getInstance().setWidth(375),
+                height: ScreenUtil.getInstance().setHeight(200),
+                color: Colors.blue,
+                child: Text(
+                    'My width:${ScreenUtil.getInstance().setWidth(375)}dp',
+                    style: TextStyle(
+                        color: Colors.white,
+                        // 跟随系统字体变化
+                        fontSize: ScreenUtil(allowFontScaling: true).setSp(20))),
+              ),
+            ],
+          ),
+
+          ///当前设备宽度 dp
+          Text('Device width:${ScreenUtil.screenWidth}px'),
+          ///当前设备高度 dp
+          Text('Device height:${ScreenUtil.screenHeight}px'),
+          ///设备的像素密度
+          Text('Device pixel density:${ScreenUtil.pixelRatio}'),
+          ///底部安全区距离 dp
+          Text('Bottom safe zone distance:${ScreenUtil.bottomBarHeight}px'),
+          ///状态栏高度 dp 刘海屏会更高
+          Text('Status bar height:${ScreenUtil.statusBarHeight}px'),
+          
+          SizedBox(
+            height: ScreenUtil.getInstance().setHeight(100),
+          ),
+          // 不跟随系统字体变化
+          Text(
+            "24px fontsize text",
+            style: TextStyle(
+              fontSize: ScreenUtil.getInstance().setSp(24),
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.display1,
+          ),
+          // 跟随系统字体变化
+          Text(
+            "24px fontsize text",
+            style: TextStyle(
+              fontSize: ScreenUtil(allowFontScaling: true).setSp(24),
             ),
-          ],
-        ),
+          ),
+          SizedBox(
+            height: ScreenUtil.getInstance().setHeight(100),
+          ),
+          Text('System font scaling factor:${ScreenUtil.textScaleFactory}'),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                  'My font size is 14px on the design draft and will not change with the system.',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: ScreenUtil.getInstance().setSp(14),
+                  )),
+              Text(
+                  'My font size is 14px on the design draft and will change with the system.',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: ScreenUtil(allowFontScaling: true).setSp(24),
+                  )),
+            ],
+          )
+        ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
